@@ -16,7 +16,9 @@ import android.speech.SpeechRecognizer;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class SmartPlayerActivity extends AppCompatActivity {
@@ -74,7 +76,12 @@ public class SmartPlayerActivity extends AppCompatActivity {
 
             @Override
             public void onResults(Bundle bundle) {
+                ArrayList<String>matchesFound =bundle.getStringArrayList(speechRecognizer.RESULTS_RECOGNITION);
+                if(matchesFound !=null){
+                    keeper =matchesFound.get(0);
 
+                    Toast.makeText(SmartPlayerActivity.this, "Result =" + keeper, Toast.LENGTH_LONG).show();
+                }
             }
 
             @Override
@@ -94,9 +101,12 @@ public class SmartPlayerActivity extends AppCompatActivity {
                 switch(motionEvent.getAction())
                 {
                     case MotionEvent.ACTION_DOWN:
+                        speechRecognizer.startListening(speechRecognizerIntent);
+                        keeper = "  ";
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        speechRecognizer.stopListening();
                         break;
                 }
                 return false;
